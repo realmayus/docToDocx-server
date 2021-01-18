@@ -13,22 +13,14 @@ libreoffice_binary = config["config"]["libreoffice_bin"]
 allow = config["config"]["allow_origins"].split(",")
 
 
-#  const allowedOrigins = ['http://localhost:8081', 'http://localhost:8080'];
-#  const origin = req.headers.origin;
-#  if (allowedOrigins.includes(origin)) {
-#    res.setHeader('Access-Control-Allow-Origin', origin);
-#  }
-#  //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
-#  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-#  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-#  res.header('Access-Control-Allow-Credentials', "true");
-
 @app.after_request
 def add_cors_headers(response):
-    if hasattr(request, "Origin"):
+    print("after")
+    if "Origin" in request.headers:
         r = request.headers['Origin']
         print(r)
         if r in allow:
+            print(r, str(allow))
             response.headers.add('Access-Control-Allow-Origin', r)
             response.headers.add('Access-Control-Allow-Credentials', 'true')
             response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
@@ -41,7 +33,7 @@ def add_cors_headers(response):
 
 
 @app.route("/", methods=["POST"])
-def hello():
+def convert():
     # Delete existing files in /uploads to free up space
     for root, dirs, files in os.walk("./uploads"):
         for file in files:
