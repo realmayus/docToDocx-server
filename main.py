@@ -15,12 +15,9 @@ allow = config["config"]["allow_origins"].split(",")
 
 @app.after_request
 def add_cors_headers(response):
-    print("after")
     if "Origin" in request.headers:
         r = request.headers['Origin']
-        print(r)
         if r in allow:
-            print(r, str(allow))
             response.headers.add('Access-Control-Allow-Origin', r)
             response.headers.add('Access-Control-Allow-Credentials', 'true')
             response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
