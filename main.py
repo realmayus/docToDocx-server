@@ -25,7 +25,7 @@ allow = config["config"]["allow_origins"].split(",")
 
 @app.after_request
 def add_cors_headers(response):
-    r = request.referrer[:-1]
+    r = request.headers['Origin']
     if r in allow:
         response.headers.add('Access-Control-Allow-Origin', r)
         response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -35,6 +35,7 @@ def add_cors_headers(response):
         response.headers.add('Access-Control-Allow-Headers', 'Authorization')
         response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
     return response
+
 
 @app.route("/", methods=["POST"])
 def hello():
