@@ -25,15 +25,17 @@ allow = config["config"]["allow_origins"].split(",")
 
 @app.after_request
 def add_cors_headers(response):
-    r = request.headers['Origin']
-    if r in allow:
-        response.headers.add('Access-Control-Allow-Origin', r)
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Headers', 'Cache-Control')
-        response.headers.add('Access-Control-Allow-Headers', 'X-Requested-With')
-        response.headers.add('Access-Control-Allow-Headers', 'Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
+    if hasattr(request, "Origin"):
+        r = request.headers['Origin']
+        if r in allow:
+            response.headers.add('Access-Control-Allow-Origin', r)
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+            response.headers.add('Access-Control-Allow-Headers', 'Cache-Control')
+            response.headers.add('Access-Control-Allow-Headers', 'X-Requested-With')
+            response.headers.add('Access-Control-Allow-Headers', 'Authorization')
+            response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
+        return response
     return response
 
 
@@ -53,4 +55,5 @@ def hello():
 
 
 if __name__ == "__main__":
+    print("Allowed origins:", ", ".join(allow))
     app.run(port=5001, debug=False)
