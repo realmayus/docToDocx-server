@@ -27,6 +27,7 @@ allow = config["config"]["allow_origins"].split(",")
 def add_cors_headers(response):
     if hasattr(request, "Origin"):
         r = request.headers['Origin']
+        print(r)
         if r in allow:
             response.headers.add('Access-Control-Allow-Origin', r)
             response.headers.add('Access-Control-Allow-Credentials', 'true')
